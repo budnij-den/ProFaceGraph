@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js">
+</script>
+
+  <style type="text/css">
+   .wrapper{
+   	margin: auto;
+   }
+   #showGreen{
+
+   }
+   #hideGreen{
+
+   }
+  </style>
+<body>
+
+<div class="wrapper col-xs-12 col-sm-10 col-md-10 col-lg-10">
+
+<table class="wrapper">
+	<tr>
+		<td><h1>ПроФейсГраф</h1></td>
+		<td id="showGreen" class="button btn-success">showGreen</td>
+	</tr>
+	<tr>
+		<td><h3>мониторинг процессов</h3></td>
+		<td id="hideGreen" class="button btn-warning green">hideGreen</td>
+	</tr>
+</table>
+
+<% colorClass='green' %>
+
+<table class="table table-hover table-bordered">
+	<th>Процесс</th>
+	<th>Статус</th>
+	<% @@hierarchizer.each do |row| %>
+		<% row[1].each do |card| %>
+			<% if (!card["due"].nil? and !card["closed"] and !card["dueComplete"])%>
+				<% colorClass='red' if (Time.parse(card["due"])-Time.now()).to_i / (24 * 60 * 60)<0 %>
+				<% colorClass='yellow' if (Time.parse(card["due"])-Time.now()).to_i / (24 * 60 * 60)==0 %>
+			<% end %>
+		<% end %>
+		<tr class="<%= colorClass %>">
+			<td>
+				<a href="<%= "https://trello.com/b/"+row[0]["id"]%>">
+					<%= row[0]["name"]%>
+				</a>
+			</td>
+			<td>
+				<svg width="3em" height="2em">
+					<rect rx="10" ry="10" width="90%" height="90%" fill="<%= colorClass %>"></rect>
+				</svg>
+			</td>
+		</tr>				
+		<% colorClass='green'%>
+	<% end %>
+</table>
+<br>
+<a href="/index">отладка</a>
+
+</div>
+<script type="text/javascript">
+	$("#hideGreen" ).click(function(){
+		$(".green").hide()
+	});
+	$("#showGreen").click(function(){
+		$(".green").show()
+	});
+</script>
+</body>

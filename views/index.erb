@@ -1,0 +1,69 @@
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js">
+	
+</script>
+<% require 'httparty' %>
+
+<h1>indexView</h1>
+
+<% colorClass='green' %>
+
+<table class="table">
+	<% @@hierarchizer.each do |row| %>
+		<% row[1].each do |card| %>
+			<% if (!card["due"].nil? and !card["closed"] and !card["dueComplete"])%>
+				<% colorClass='red' if (Time.parse(card["due"])-Time.now()).to_i / (24 * 60 * 60)<0 %>
+				<% colorClass='yellow' if (Time.parse(card["due"])-Time.now()).to_i / (24 * 60 * 60)==0 %>
+			<% end %>
+		<% end %>
+		<tr id="<%= colorClass %>">
+			<td><%= row[0]["name"]%></td>
+			<td>
+				<svg width="3em" height="2em">
+					<rect rx="10" ry="10" width="90%" height="90%" fill="<%= colorClass %>"></rect>
+				</svg>
+			</td>
+		</tr>				
+		<% colorClass='green'%>
+	<% end %>
+</table>
+
+
+
+<br>
+<a href="/gui">generalView</a>
+<br><br>
+<hr>
+<br><br>
+<b>urls are:</b><br>
+	<% @boardsCardsUrls.each do |url| %>
+		<b><%= url%></b>
+		<br>
+		<br>
+		<%= HTTParty.get(url).parsed_response %>
+		<br>
+		<br>
+	<% end %>
+<br><hr><br>
+<b>urls are:</b><br>
+	<% @boardsUrls.each do |url| %>
+		<b><%= url%></b>
+		<br>
+		<br>
+		<%= HTTParty.get(url).parsed_response %>
+		<br>
+		<br>
+	<% end %>
+<br><br>
+
+<b>collected data are:</b><br>
+	<% @@hierarchizer.each do |e| %>
+		<b><%= url%></b>
+		<br>
+		<br>
+		<%= e %>
+		<br>
+		<br>
+	<% end %>
+<br><br>
