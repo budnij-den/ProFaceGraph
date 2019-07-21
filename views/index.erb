@@ -1,14 +1,13 @@
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js">
-	
 </script>
 <% require 'httparty' %>
 
 <h1>indexView</h1>
 
 <% colorClass='green' %>
-
+<p class="glyphicon glyphicon-refresh" id="refreshPage"></p>
 <table class="table">
 	<% @@hierarchizer.each do |row| %>
 		<% row[1].each do |card| %>
@@ -67,3 +66,9 @@
 		<br>
 	<% end %>
 <br><br>
+
+<script type="text/javascript">
+	$('#refreshPage').click(function() {
+   	 location.reload();
+	});
+</script>
